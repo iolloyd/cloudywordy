@@ -30,5 +30,18 @@ with the private key.
 
 In the case of this application, the keys would be stored separately and imported into the environment at runtime. 
 
+### Running locally
+
+In order to make this work locally, you need to install [gae_installer](https://github.com/peterhudec/gae_installer).
+
+- Create a virtual environment
+
+`virtualenv env && . env/bin/activate`
+    
+- Install with php
+
+`pip install gae_installer`
+
+    
 
 
