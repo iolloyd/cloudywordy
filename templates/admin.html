@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<h2>Word frequencies </h2>
+<dl>
+{% for w, f in counts %}
+    <dt>{{ w }}</dt><dd>{{ f }}</dd>
+{% end %}
+</dl>
+</body>
+</html>
