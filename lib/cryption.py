@@ -1,6 +1,6 @@
 import binascii
 from Crypto.PublicKey import RSA
-from Crypto.Cipher import AES, PKCS1_OAEP
+from Crypto.Cipher import PKCS1_OAEP
 
 import os
 from os.path import dirname
@@ -29,6 +29,7 @@ def decrypt_word(word):
     f = open(get_priv_key_file(), 'r')
     r = RSA.import_key(f.read())
     cipher = PKCS1_OAEP.new(r)
+    word = binascii.a2b_base64(word)
     try:
         plain_word = cipher.decrypt(word)
     except:
