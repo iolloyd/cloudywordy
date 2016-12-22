@@ -14,15 +14,18 @@ def connect_to_cloudsql():
         cloudsql_unix_socket = os.path.join(
             '/cloudsql', CLOUDSQL_CONNECTION_NAME)
 
-        db = MySQLdb.connect(
+        db = pymysql.connect(
             unix_socket=cloudsql_unix_socket,
             user=CLOUDSQL_USER,
-            passwd=CLOUDSQL_PASSWORD)
+            password=CLOUDSQL_PASSWORD,
+            db='cloudywordy',
+        )
 
     else:
         db = pymysql.connect(host='127.0.0.1',
                              user=CLOUDSQL_USER,
-                             passwd=CLOUDSQL_PASSWORD)
+                             passwd=CLOUDSQL_PASSWORD,
+                             db='cloudywordy')
 
     return db
 
