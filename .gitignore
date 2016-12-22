@@ -1,3 +1,5 @@
 cloudy*
 app.yaml
 *.pem
+*.pyc
+
