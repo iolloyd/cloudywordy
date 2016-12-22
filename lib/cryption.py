@@ -1,7 +1,8 @@
+import binascii
 from Crypto.PublicKey import RSA
+from Crypto.Cipher import AES, PKCS1_OAEP
 
 import os
-from os import chmod
 from os.path import dirname
 
 
@@ -16,23 +17,20 @@ def get_priv_key_file():
 
 
 def encrypt_word(word):
-    pem_file = get_pub_key_file()
-    crypto = pem_file.encrypt(str(word), pem_file)
-    return crypto
+    f = open(get_pub_key_file(), 'r')
+    r = RSA.import_key(f.read())
+    cipher = PKCS1_OAEP.new(r)
+    enc_word = cipher.encrypt(word.encode())
+
+    return binascii.b2a_base64(enc_word)
 
 
-if __name__ == '__main__':
-    key = RSA.generate(2048)
-    with open(get_pub_key_file(), 'w') as f:
-        chmod(get_pub_key_file(), 0600)
-        f.write(key.exportKey('PEM'))
+def decrypt_word(word):
+    f = open(get_priv_key_file(), 'r')
+    r = RSA.import_key(f.read())
+    decrypted_word = r.decrypt(word)
 
-    encrypted_key = key.exportKey(pkcs=8,
-                                  protection="scryptAndAES128-CBC")
-
-    pub_key = key.publickey()
-    with open(get_priv_key_file(), 'w') as f:
-        f.write(pub_key.exportKey('PEM'))
+    return decrypted_word
 
 
 
