@@ -1,0 +1,10 @@
+backports-abc==0.5
+beautifulsoup4==4.5.1
+bs4==0.0.1
+certifi==2016.9.26
+logger==1.4
+pycryptodome==3.4.3
+PyMySQL==0.7.9
+singledispatch==3.4.0.3
+six==1.10.0
+tornado==4.4.2
