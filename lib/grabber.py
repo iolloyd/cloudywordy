@@ -14,7 +14,7 @@ from tornado.httpclient import HTTPClient as Client, HTTPError
 
 def save_top_words(url):
     data = fetch_from_url(url)
-    words = good_words(data)
+    words = get_good_words(data)
     frequency_map = get_word_frequencies(words)
     save_frequencies(frequency_map)
 
@@ -26,6 +26,7 @@ def fetch_from_url(url):
         body = unicode(html.body)
         soup = BeautifulSoup(body, "html.parser")
         data = soup.findAll(text=True)
+        data = filter(soup_filter, data)
         return data
     except HTTPError as e:
         print('Received a non-200 response: {}'.format(e))
@@ -35,24 +36,20 @@ def fetch_from_url(url):
     client.close()
 
 
-def good_words(data):
-    sentences = [w for w in data if good_words_filter(w)]
+def get_good_words(sentences):
     words = [s.split() for s in sentences]
     words = [w for sub in words for w in sub]
 
     return words
 
 
-def good_words_filter(soup_node):
+def soup_filter(node):
     not_tag = lambda x: x.parent.name not in ['[document]', 'head', 'script', 'style']
     not_comment = lambda x: not re.match('<!--.*-->', str(x))
     not_empty = lambda x: x not in ['', '\n', ]
 
-    # Want to use nltk but had some issues downloading the corpora
-
-    return not_tag(soup_node) and \
-           not_comment(soup_node) and \
-           not_empty(soup_node)
+    # Wanted to use nltk but had some issues downloading the corpora
+    return not_tag(node) and not_comment(node) and not_empty(node)
 
 
 def get_word_frequencies(words, most_wanted=100):
