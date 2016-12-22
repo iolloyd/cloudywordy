@@ -7,7 +7,7 @@ from cryption import encrypt_word
 CLOUDSQL_CONNECTION_NAME = os.environ.get('CLOUDSQL_CONNECTION_NAME')
 CLOUDSQL_USER = os.environ.get('CLOUDSQL_USER')
 CLOUDSQL_PASSWORD = os.environ.get('CLOUDSQL_PASSWORD')
-
+SECRET_HASH = os.environ.get('SECRET_HASH')
 
 def connect_to_sql():
     if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
@@ -20,7 +20,6 @@ def connect_to_sql():
             password=CLOUDSQL_PASSWORD,
             db='cloudywordy',
         )
-
     else:
         db = pymysql.connect(host='127.0.0.1',
                              user=CLOUDSQL_USER,
@@ -53,15 +52,14 @@ def save_frequencies(frequency_map):
         VALUES {0}
         ON DUPLICATE KEY UPDATE total_frequency=total_frequency+VALUES(total_frequency)
         """.format(values_string)
-    print(sql)
     db = connect_to_sql()
+
     with db.cursor() as cursor:
         cursor.execute(sql)
     db.commit()
 
 
 def hashed(word):
-    super_secret_hash = 'wewantlloyd'
-    hashed_word = hashlib.sha256(word + super_secret_hash).hexdigest()
+    hashed_word = hashlib.sha256(word + SECRET_HASH).hexdigest()
 
     return hashed_word
