@@ -9,7 +9,7 @@ CLOUDSQL_USER = os.environ.get('CLOUDSQL_USER')
 CLOUDSQL_PASSWORD = os.environ.get('CLOUDSQL_PASSWORD')
 
 
-def connect_to_cloudsql():
+def connect_to_sql():
     if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
         cloudsql_unix_socket = os.path.join(
             '/cloudsql', CLOUDSQL_CONNECTION_NAME)
@@ -31,12 +31,13 @@ def connect_to_cloudsql():
 
 
 def get_data_from_cloudsql():
-    db = connect_to_cloudsql()
-    cursor = db.cursor()
-    cursor.execute('SHOW VARIABLES')
-    words = [r for r in cursor.fetchall()]
-
-    return words
+    sql = "SELECT * FROM words"
+    db = connect_to_sql()
+    with db.cursor() as cursor:
+        cursor.execute(sql)
+    rows = cursor.fetchall()
+    print(rows)
+    return None
 
 
 def save_frequencies(frequency_map):
@@ -49,11 +50,9 @@ def save_frequencies(frequency_map):
         VALUES {0}
         ON DUPLICATE KEY UPDATE total_frequency=total_frequency+VALUES(total_frequency)
         """.format(values_string)
-    print(sql)
-    db = connect_to_cloudsql()
+    db = connect_to_sql()
     with db.cursor() as cursor:
         cursor.execute(sql)
-
 
 
 def hashed(word):
