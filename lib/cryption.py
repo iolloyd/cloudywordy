@@ -1,23 +1,38 @@
-import rsa
+from Crypto.PublicKey import RSA
+
 import os
+from os import chmod
 from os.path import dirname
 
 
-def get_key(key_type):
-    if key_type not in ['priv', 'pub']:
-        raise AttributeError("You provided a type that I don't know. "
-                             "You have to provide either 'priv' or 'pub'")
+def get_pub_key_file():
+    key_file = os.path.join(dirname(dirname(__file__)), 'keys', 'public.key')
+    return key_file
 
-    key_file = os.path.join(dirname(dirname(__file__)), 'keys', '{}.pem'.format(key_type))
-    with open(key_file, 'r') as f:
-        pub = f.read()
-    return pub
+
+def get_priv_key_file():
+    key_file = os.path.join(dirname(dirname(__file__)), 'keys', 'private.key')
+    return key_file
 
 
 def encrypt_word(word):
-    return word
-    pub = get_key('pub')
-    crypto = rsa.encrypt(word, pub)
+    pem_file = get_pub_key_file()
+    crypto = pem_file.encrypt(str(word), pem_file)
     return crypto
+
+
+if __name__ == '__main__':
+    key = RSA.generate(2048)
+    with open(get_pub_key_file(), 'w') as f:
+        chmod(get_pub_key_file(), 0600)
+        f.write(key.exportKey('PEM'))
+
+    encrypted_key = key.exportKey(pkcs=8,
+                                  protection="scryptAndAES128-CBC")
+
+    pub_key = key.publickey()
+    with open(get_priv_key_file(), 'w') as f:
+        f.write(pub_key.exportKey('PEM'))
+
 
 
