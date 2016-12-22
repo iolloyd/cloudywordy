@@ -31,13 +31,12 @@ def connect_to_sql():
 
 
 def get_data_from_cloudsql():
-    sql = "SELECT * FROM words"
+    sql = "SELECT encrypted_word, total_frequency FROM words"
     db = connect_to_sql()
     with db.cursor() as cursor:
         cursor.execute(sql)
     rows = cursor.fetchall()
-    print(rows)
-    return None
+    return rows
 
 
 def save_frequencies(frequency_map):
@@ -52,8 +51,8 @@ def save_frequencies(frequency_map):
         """.format(values_string)
     db = connect_to_sql()
     with db.cursor() as cursor:
-        cursor.execute(sql)
-
+        result = cursor.execute(sql)
+    print(result)
 
 def hashed(word):
     super_secret_hash = 'wewantlloyd'
