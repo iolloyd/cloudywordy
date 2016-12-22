@@ -1,14 +1,13 @@
 from tornado.web import RequestHandler
-from tornado.escape import json_decode
 from lib.grabber import save_top_words
+import urllib
 
 
 class MainHandler(RequestHandler):
     def get(self):
-        self.write("Hello, world")
+        self.render('../templates/form.html')
 
     def post(self):
-        data = json_decode(self.request.body)
-        url = data['url']
+        url = self.get_argument('url')
         save_top_words(url)
-        self.redirect('/urls')
+        self.redirect('/')
