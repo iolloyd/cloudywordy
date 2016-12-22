@@ -47,4 +47,9 @@ Once installed, run the following
 
 `. ~/.virtualenvs/octopus/bin/dev_appserver --skip_sdk_update_check=yes .`
 
+### Limitations
+
+Currently, this app will not deploy to the GAE sandbox due to restrictions
+on _ctypes. 
+
 
