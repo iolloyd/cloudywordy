@@ -36,6 +36,8 @@ def get_data_from_cloudsql():
     with db.cursor() as cursor:
         cursor.execute(sql)
 
+    db.commit()
+
     rows = cursor.fetchall()
 
     return rows
@@ -54,8 +56,8 @@ def save_frequencies(frequency_map):
     print(sql)
     db = connect_to_sql()
     with db.cursor() as cursor:
-        result = cursor.execute(sql)
-    print(result)
+        cursor.execute(sql)
+    db.commit()
 
 
 def hashed(word):
