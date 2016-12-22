@@ -35,7 +35,9 @@ def get_data_from_cloudsql():
     db = connect_to_sql()
     with db.cursor() as cursor:
         cursor.execute(sql)
+
     rows = cursor.fetchall()
+
     return rows
 
 
@@ -49,10 +51,12 @@ def save_frequencies(frequency_map):
         VALUES {0}
         ON DUPLICATE KEY UPDATE total_frequency=total_frequency+VALUES(total_frequency)
         """.format(values_string)
+    print(sql)
     db = connect_to_sql()
     with db.cursor() as cursor:
         result = cursor.execute(sql)
     print(result)
+
 
 def hashed(word):
     super_secret_hash = 'wewantlloyd'

@@ -28,9 +28,13 @@ def encrypt_word(word):
 def decrypt_word(word):
     f = open(get_priv_key_file(), 'r')
     r = RSA.import_key(f.read())
-    decrypted_word = r.decrypt(word)
+    cipher = PKCS1_OAEP.new(r)
+    try:
+        plain_word = cipher.decrypt(word)
+    except:
+        plain_word = word
 
-    return decrypted_word
+    return plain_word
 
 
 
