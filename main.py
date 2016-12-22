@@ -7,6 +7,7 @@ from handlers import MainHandler, AdminHandler
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
+        (r"/submit", MainHandler),
         (r"/admin", AdminHandler)
     ])
 
