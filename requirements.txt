@@ -2,6 +2,7 @@ backports-abc==0.5
 beautifulsoup4==4.5.1
 bs4==0.0.1
 certifi==2016.9.26
+gae-installer==1.9.17.3
 logger==1.4
 pycryptodome==3.4.3
 PyMySQL==0.7.9
